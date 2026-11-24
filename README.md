@@ -9,7 +9,7 @@ A command-line tool that converts a Markdown file into a professional PDF or HTM
 - **Title page and table of contents.** The first level-1 heading becomes the document title. The paragraphs that follow it, up to the next heading, become the subtitle. A table of contents is generated automatically on its own page.
 - **Mermaid diagrams.** Rendered to SVG and sized to 70% of the text width. A diagram taller than one page is scaled down so it fits on a single page, and the heading above it stays on the same page.
 - **Syntax-highlighted code.** Common fence names such as `csharp`, `shell` and `pwsh` are mapped to Typst's language names. PowerShell is supported through a bundled syntax definition.
-- **Hyphenated line breaks.** Long unbroken words are given soft-hyphen break points, so Typst shows a hyphen only where a line actually breaks.
+- **Hyphenated line breaks.** Long unbroken words are given soft-hyphen break points, so Typst shows a hyphen only where a line actually breaks. Inline code breaks after separators such as `_`, `.` and `/`, so long identifiers wrap inside table cells.
 - **Tables.** Centred, with no outer border, inner lines only, and a bold rule under the header.
 - **Auto-numbered lists.** The template numbers ordered lists (`1.`, `a.`, `i.`), so the numbers in the Markdown do not matter. Bullets change glyph by depth (`•`, `–`, `▪`).
 - **Bundled fonts.** Public Sans (SIL Open Font License, see `fonts\OFL.txt`) and the GMS logo are included.
@@ -77,7 +77,7 @@ Warnings do not change the exit code. Examples are a missing image, which is rep
 
 The converter supports the following Markdown:
 
-- Headings (levels 1 to 6). The first level-1 heading is the document title.
+- Headings (levels 1 to 6). The first level-1 heading is the document title. Heading text is set in book case at every level, so `## setting up the database` is shown as "Setting Up the Database". Small words such as "the" and "of" stay lower case, and words that already contain a capital, such as "HTML", are kept as written.
 - Paragraphs, emphasis, strong text, inline code and links.
 - Nested bullet and ordered lists.
 - Pipe tables.

@@ -22,6 +22,11 @@ internal sealed class MarkdownToTypst
     private const char SoftHyphen = '\u00AD';
     private const int MaxUnbrokenRun = 20;
 
+    // Inline code has no spaces, so it gets break opportunities after these separators and before camelCase words.
+    private const char ZeroWidthSpace = '\u200B';
+    private const string CodeBreakAfter = "_./\\:,=&";
+    private const int MaxUnbrokenCodeRun = 16;
+
     public const string ImageRoot = "/assets/";
     public const string DiagramRoot = "/diagrams/";
 
@@ -314,7 +319,7 @@ internal sealed class MarkdownToTypst
                 sb.Append(lineBreak.IsHard ? "#linebreak()" : " ");
                 break;
             case CodeInline code:
-                sb.Append($"#raw({ToTypstString(code.Content)})");
+                sb.Append($"#raw({ToTypstString(BreakCode(code.Content))})");
                 break;
             case EmphasisInline emphasis:
                 AppendEmphasis(sb, emphasis);
@@ -449,6 +454,42 @@ internal sealed class MarkdownToTypst
                 sb.Append('\\');
             }
             sb.Append(c);
+        }
+        return sb.ToString();
+    }
+
+    // Lets long inline code wrap inside table cells: zero-width spaces after separators and before camelCase words,
+    // then a soft hyphen when a run is still too long.
+    private static string BreakCode(string code)
+    {
+        var sb = new StringBuilder(code.Length + 8);
+        var run = 0;
+        for (var i = 0; i < code.Length; i++)
+        {
+            var c = code[i];
+            if (i > 0 && char.IsUpper(c) && char.IsLetterOrDigit(code[i - 1]) && !char.IsUpper(code[i - 1]))
+            {
+                sb.Append(ZeroWidthSpace);
+                run = 0;
+            }
+
+            if (char.IsWhiteSpace(c))
+            {
+                run = 0;
+            }
+            else if (++run > MaxUnbrokenCodeRun)
+            {
+                sb.Append(SoftHyphen);
+                run = 1;
+            }
+
+            sb.Append(c);
+
+            if (CodeBreakAfter.Contains(c) && i < code.Length - 1)
+            {
+                sb.Append(ZeroWidthSpace);
+                run = 0;
+            }
         }
         return sb.ToString();
     }

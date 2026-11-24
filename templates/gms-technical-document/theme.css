@@ -71,6 +71,7 @@ td, th {
   border-top: 0.5pt solid #e3e1db;
   border-left: 0.5pt solid #e3e1db;
 }
+td code, th code { overflow-wrap: anywhere; }
 td:first-child, th:first-child { border-left: none; }
 tr:first-child td, tr:first-child th {
   font-weight: 700;

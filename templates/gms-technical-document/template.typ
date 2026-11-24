@@ -187,7 +187,10 @@
   }
 
   show raw: set text(font: "DejaVu Sans Mono", size: 0.9em)
-  show raw.where(block: false): it => box(fill: warm-grey, inset: (x: 3pt, y: 0pt), outset: (y: 2pt), radius: 2pt, it)
+  // Inline code uses highlight rather than box, because a box cannot wrap inside a table cell.
+  show raw.where(block: false): it => context if target() == "html" { it } else {
+    highlight(fill: warm-grey, extent: 3pt, radius: 2pt, it)
+  }
   show raw.where(block: true): it => block(
     width: 100%,
     fill: warm-grey,
