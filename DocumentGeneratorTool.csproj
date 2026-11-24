@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>DocumentGeneratorTool</RootNamespace>
+    <!-- TypstInterop restores its native engine only for a specific RID. Change this for other platforms. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="templates\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="fonts\*.ttf;fonts\*.otf;fonts\OFL.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="syntaxes\*.sublime-syntax" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="1.6.0" />
+    <PackageReference Include="TypstInterop" Version="2.2.0" />
+  </ItemGroup>
+
+</Project>

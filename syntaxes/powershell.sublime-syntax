@@ -1,0 +1,59 @@
+%YAML 1.2
+---
+# Minimal PowerShell grammar for Typst raw blocks. Typst's bundled syntax set has no PowerShell.
+name: PowerShell
+scope: source.powershell
+file_extensions:
+  - ps1
+  - psm1
+  - psd1
+contexts:
+  main:
+    - match: '#.*$\n?'
+      scope: comment.line.number-sign.powershell
+    - match: '<#'
+      scope: punctuation.definition.comment.powershell
+      push: block_comment
+    - match: '"'
+      scope: punctuation.definition.string.begin.powershell
+      push: double_string
+    - match: "'"
+      scope: punctuation.definition.string.begin.powershell
+      push: single_string
+    - match: '(?i)\$(true|false|null)\b'
+      scope: constant.language.powershell
+    - match: '\$(\{[^}]*\}|[A-Za-z_][\w:]*|\$|\?|\^)'
+      scope: variable.other.powershell
+    - match: '(?i)\b(begin|break|catch|class|continue|data|define|do|dynamicparam|else|elseif|end|enum|exit|filter|finally|for|foreach|from|function|hidden|if|in|param|process|return|switch|throw|trap|try|until|using|var|while|workflow|parallel|sequence|inlinescript)\b'
+      scope: keyword.control.powershell
+    - match: '(?i)-(eq|ne|gt|ge|lt|le|like|notlike|match|notmatch|contains|notcontains|in|notin|and|or|xor|not|band|bor|bxor|bnot|is|isnot|as|replace|split|join|f|c|i)\b'
+      scope: keyword.operator.powershell
+    - match: '\b[A-Za-z]+-[A-Za-z][\w-]*'
+      scope: support.function.powershell
+    - match: '(?<![\w])-[A-Za-z_]\w*'
+      scope: keyword.other.parameter.powershell
+    - match: '\b\d+(\.\d+)?\b'
+      scope: constant.numeric.powershell
+    - match: '\[[\w.\[\]]+\]'
+      scope: storage.type.powershell
+  block_comment:
+    - meta_scope: comment.block.powershell
+    - match: '#>'
+      scope: punctuation.definition.comment.powershell
+      pop: true
+  double_string:
+    - meta_scope: string.quoted.double.powershell
+    - match: '`.'
+      scope: constant.character.escape.powershell
+    - match: '\$(\{[^}]*\}|[A-Za-z_][\w:]*)'
+      scope: variable.other.powershell
+    - match: '"'
+      scope: punctuation.definition.string.end.powershell
+      pop: true
+  single_string:
+    - meta_scope: string.quoted.single.powershell
+    - match: "''"
+      scope: constant.character.escape.powershell
+    - match: "'"
+      scope: punctuation.definition.string.end.powershell
+      pop: true
