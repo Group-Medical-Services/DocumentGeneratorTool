@@ -63,6 +63,25 @@ DocumentGeneratorTool.exe docs\design.md --format html --output out\design.html
 DocumentGeneratorTool.exe docs\design.md --template my-template
 ```
 
+### Run it as a PowerShell command
+
+To call the tool from any folder, create a `gmsdoc.cmd` shim in a folder on your PATH. The shim forwards every argument to the built executable. Adjust the path if the repository is somewhere else.
+
+The default user PATH already includes `%LOCALAPPDATA%\Microsoft\WindowsApps`, so the shim can go there:
+
+```bat
+@echo off
+"C:\Users\kkaul\source\repos\DocumentGeneratorTool\bin\Debug\net10.0\win-x64\DocumentGeneratorTool.exe" %*
+```
+
+Save it as `%LOCALAPPDATA%\Microsoft\WindowsApps\gmsdoc.cmd`. Open a new terminal, then use `gmsdoc` in place of the executable in PowerShell or cmd:
+
+```powershell
+gmsdoc docs\design.md --format html --output out\design.html
+```
+
+A `.cmd` shim is not subject to the PowerShell execution policy. A PowerShell profile function is an alternative, but profiles on a network share can be blocked by the policy.
+
 ### Exit codes
 
 | Code | Meaning |
